@@ -38,7 +38,12 @@
 * 设置文件创建方式和文件大小:  pLog->SetLogProperty(eFileCreate, 100);
 * 设置控制台输出等级最低DEBUG： pLog->SetLogLevel(eConsole, JZ_DEBUG);
 * 设置文件输出等级最低INFO: pLog->SetLogLevel(eFile, JZ_INFO);
-* 写日志： pLog->Log(JZ_ERROR, "this is error message");
+* 写日志： 
+	方式一: pLog->Log(JZ_ERROR, "this is error message");
+	
+	方式二：LogError(pLog) << "this is error message." << " can write int:" << 123 << " can write double：" << 123.456;
+	
+	
 * 反初始化: CleanupLog(pLog);
 * 以上接口可多次调用
 
