@@ -62,7 +62,7 @@ class JZLogStream
 {
 public:
 	JZLogStream(ILogLibrary* log, int level) 
-		: m_log(log), m_message("")
+		: m_log(log), m_message(""), m_level(level)
 	{
 	}
 	~JZLogStream()
@@ -88,7 +88,7 @@ public:
 		return *this;
 	}
 
-	JZLogStream& operator << (const char* msg) { return write_buffer(msg, sizeof(msg)); }
+	JZLogStream& operator << (const char* msg) { return write_buffer(msg, strlen(msg)); }
 	JZLogStream& operator << (char ch) { return write_buffer(&ch, 1); }
 	JZLogStream & operator << (unsigned char ch) { return (*this << (unsigned long long)ch); }
 	JZLogStream& operator << (bool val) { return (val ? write_buffer("true", 4) : write_buffer("false", 5)); }
@@ -151,11 +151,13 @@ private:
 	std::string m_message;
 };
 
-#define LogDebug(log) JZLogStream(pLog, JZ_DEBUG)
-#define LogInfo(log) JZLogStream(log, JZ_INFO)
-#define LogWarn(log) JZLogStream(log, JZ_WARN)
-#define LogError(log) JZLogStream(log, JZ_ERROR)
-#define LogFatal(log) JZLogStream(log, JZ_FATAL)
+#define LOG_STREAM(log, level) JZLogStream(log, level) << " [" << __FILE__ <<":"<< __FUNCTION__ << "] "
+
+#define LogDebug(log) LOG_STREAM(log, JZ_DEBUG)
+#define LogInfo(log) LOG_STREAM(log, JZ_INFO)
+#define LogWarn(log) LOG_STREAM(log, JZ_WARN)
+#define LogError(log) LOG_STREAM(log, JZ_ERROR)
+#define LogFatal(log) LOG_STREAM(log, JZ_FATAL)
 
 
 JZLOG_API ILogLibrary* CreateLog(char* arg);
